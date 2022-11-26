@@ -1,2 +1,3 @@
-# recordAutoTwitch
-This script record auto video live Twitch
+# Requirement
+- [streamlink](https://streamlink.github.io/)
+- [ffmpeg](https://ffmpeg.org/)
