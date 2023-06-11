@@ -1,27 +1,30 @@
-/*
-
-Requirement : streamlink, ffmpeg
-
-*/
 console.clear()
+/*
+    ---   TWITCH TOKEN   ---
 
-// Requirefs.
-const https = require(`https`)
-const fs = require(`fs`)
+    -> run browser
+    -> twitch.tv (connected)
+    -> js console
+    -> document.cookie.split("; ").find(item=>item.startsWith("auth-token="))?.split("=")[1]
+*/
+
+// Require
+const Https = require(`https`)
+const Fs = require(`fs`)
 const { twitch } = require(`/home/flens/twitch.json`)
 const { exec } = require(`child_process`)
 
 // Const
 const scriptStartedAt = new Date()
 
+// Let
 let user = {
-    id: ``,
-    login: `fl9ns`,
-    display_name: `fl9ns`
+    id: `165122142`,
+    login: `farah`,
+    display_name: `Farah`
 }
-
 let started = ``
-let directoryVideos = `/home/flens/Videos`
+let direc = `/run/media/flens/Twitch`
 
 function readParameters() {
 
@@ -42,14 +45,12 @@ function readParameters() {
                 fatalError(`Bad channel name`)
             }
         }
-    } else {
-        fatalError(`Need argument --channel`)
     }
 }
 
 function getUserInfo() {
     return new Promise((resolve) => {
-        https.get(
+        Https.get(
             {
                 hostname:`api.twitch.tv`,
                 path: `helix/users?login=${user.login}`,
@@ -77,7 +78,7 @@ function getUserInfo() {
 
                     // Error
                     } catch(e) {
-                        fatalError(`Can't read object from API twitch`)
+                        fatalError(`Can't read object [ run() ]`)
                     }
 
                     // Check object
@@ -96,11 +97,11 @@ function getUserInfo() {
                         console.log(`Channel : ${user.display_name} (${user.id})`)
 
                         // Directory to record
-                        directoryVideos += `/${user.login}`
-                        console.log(`Directory : ${directoryVideos}`)
+                        direc += `/${user.login}`
+                        console.log(`Directory : ${direc}`)
 
-                        if(!fs.existsSync(directoryVideos)) {
-                            fs.mkdirSync(directoryVideos)
+                        if(!Fs.existsSync(direc)) {
+                            Fs.mkdirSync(direc)
                             console.log(`Directory "${user.login}" is created !`)
                         }
 
@@ -109,7 +110,7 @@ function getUserInfo() {
 
                     // Error
                     } else {
-                        fatalError(`Can't read object from API twitch`)
+                        fatalError(`Object is bad [ run() ]`)
                     }
 
                 })
@@ -121,7 +122,7 @@ function getUserInfo() {
 function getLiveInfo() {
     return new Promise((resolve, reject) => {
         try{
-            https.get(
+            Https.get(
                 {
                     hostname:`api.twitch.tv`,
                     path: `helix/streams?user_id=${user.id}`,
@@ -190,7 +191,8 @@ async function loop() {
                 let now = getDateHuman(new Date())
                 console.log(`New LIVE : ${now.date}/${now.month}/${now.year} ${now.hour}:${now.min}:${now.sec}`)
                 let name = `${user.login}..${now.year}.${now.month}.${now.date}..${now.hour}.${now.min}.${now.sec}.mp4`
-                let cmd = `streamlink --stdout https://www.twitch.tv/${user.login}/ best | ffmpeg -i - -c copy ${directoryVideos}/${name}`
+                // let cmd = `streamlink --stdout https://www.twitch.tv/${user.login}/ best | ffmpeg -i - -c copy ${direc}/${name}`
+                let cmd = `streamlink "--twitch-api-header=Authorization=OAuth ${twitch.OAuth}" --stdout https://www.twitch.tv/${user.login}/ best | ffmpeg -i - -c copy ${direc}/${name}`
                 exec(`${cmd}`)
             }
         }
@@ -238,7 +240,7 @@ async function main() {
     console.log(`Started : ${start.date}/${start.month}/${start.year} ${start.hour}:${start.min}:${start.sec}`)
 
     // Check directory
-    if(!fs.existsSync(directoryVideos)) { fatalError(`Directory ${directoryVideos} not found`) }
+    if(!Fs.existsSync(direc)) { fatalError(`Directory not found [ main() ]`) }
 
     // Read channel name
     await readParameters()
