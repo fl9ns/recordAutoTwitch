@@ -2,6 +2,9 @@
     "twitch": {
         "clientID": "",
         "token": "",
-        "refreshToken": ""
+        "refreshToken": "",
+        "date": "",
+        "website": "https://twitchtokengenerator.com",
+        "OAuth": ""
     }
 }
