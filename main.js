@@ -1,11 +1,19 @@
 console.clear()
 /*
+    source : https://streamlink.github.io/cli/plugins/twitch.html
+
+
+
     ---   TWITCH TOKEN   ---
 
     -> run browser
     -> twitch.tv (connected)
     -> js console
     -> document.cookie.split("; ").find(item=>item.startsWith("auth-token="))?.split("=")[1]
+
+    -> get token 30 alphanumerical characters
+
+    -> put it in « OAuth » in twitch.json
 */
 
 // Require
