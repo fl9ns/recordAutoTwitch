@@ -1,8 +1,10 @@
 ```diff
-!{           VERSION : BETA 1           }!
+!{           VERSION : BETA 2           }!
 #{--------------------------------------}#
 #{                                      }#
 #{   Only one channel can be recorded   }#
+#{                                      }#
+#{    Can record with twitch account    }#
 #{                                      }#
 #{--------------------------------------}#
 ```
@@ -20,7 +22,10 @@
     "twitch": {
         "clientID": "",
         "token": "",
-        "refreshToken": ""
+        "refreshToken": "",
+        "date": "",
+        "website": "https://twitchtokengenerator.com",
+        "OAuth": ""
     }
 }
 ```
@@ -35,6 +40,14 @@ Put your token here
 (optional) You can save your refresh token
 ```json
         "refreshToken": "",
+```
+(optional) Date of your token
+```json
+        "date": "",
+```
+(optional) Token for record with account
+```json
+        "OAuth": "",
 ```
 # Run
 ```bash
